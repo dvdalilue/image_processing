@@ -2,7 +2,6 @@ Image Processing
 ================
 
 Usage
------
 
 Notes:
 
