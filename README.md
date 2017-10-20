@@ -1,7 +1,7 @@
 Image Processing
 ================
 
-Usage
+## Usage
 
 Notes:
 
