@@ -1,6 +1,7 @@
 import boofcv.io.image.UtilImageIO;
 import boofcv.struct.image.GrayU8;
 import boofcv.struct.image.ImageAccessException;
+import java.util.*;
 
 public class ImageProcessing {
     public static GrayU8 thershold(GrayU8 image, int value) {
@@ -180,6 +181,132 @@ public class ImageProcessing {
         int height = original.height;
 
         GrayU8 aux = erosion(dilation(original, size), size);
+
+        return aux;
+    }
+
+    public static ArrayList<Tuple<Integer,Integer>> neighbors_8c_points(GrayU8 image, int i, int j, int size) {
+        int color = image.get(i,j);
+        ArrayList<Tuple<Integer,Integer>> list = new ArrayList<Tuple<Integer,Integer>>(8);
+
+        for (int neighbor = 1; neighbor <= size; neighbor++) {
+            for (int n = i - neighbor; n <= i + neighbor; n++) {
+                try {
+                    if (image.get(n,j + neighbor) == color) {
+                        list.add(new Tuple<Integer,Integer>(n,j + neighbor));
+                    }
+                } catch (ImageAccessException e) { continue; }
+            }
+
+            for (int n = i - neighbor; n <= i + neighbor; n++) {
+                try {
+                    if (image.get(n,j - neighbor) == color) {
+                        list.add(new Tuple<Integer,Integer>(n,j - neighbor));
+                    }
+                } catch (ImageAccessException e) { continue; }
+            }
+
+            for (int n = j - neighbor + 1; n < j + neighbor; n++) {
+                try {
+                    if (image.get(i - neighbor,n) == color) {
+                        list.add(new Tuple<Integer,Integer>(i - neighbor,n));
+                    }
+                } catch (ImageAccessException e) { continue; }
+            }
+
+            for (int n = j - neighbor + 1; n < j + neighbor; n++) {
+                try {
+                    if (image.get(i + neighbor,n) == color) {
+                        list.add(new Tuple<Integer,Integer>(i + neighbor,n));
+                    }
+                } catch (ImageAccessException e) { continue; }
+            }
+        }
+        return list;
+    }
+
+    public static ArrayList<Tuple<Integer,Integer>> neighbors_4c_points(GrayU8 image, int i, int j, int size) {
+        int color = image.get(i,j);
+        ArrayList<Tuple<Integer,Integer>> list = new ArrayList<Tuple<Integer,Integer>>(4);
+
+        for (int n = i - size; n <= i + size; n++) {
+            if (n == i) { continue; }
+
+            try {
+                if (image.get(n,j) == color) {
+                    list.add(new Tuple<Integer,Integer>(n,j));
+                }
+            } catch (ImageAccessException e) { continue; }
+        }
+
+
+        for (int n = j - size; n <= j + size; n++) {
+            if (n == j) { continue; }
+
+            try {
+                if (image.get(i,n) == color) {
+                    list.add(new Tuple<Integer,Integer>(i,n));
+                }
+            } catch (ImageAccessException e) { continue; }
+        }
+
+        return list;
+    }
+
+    public static GrayU8 flatzone_8_connectivity(GrayU8 original, int x, int y, int label) {
+        int width = original.width;
+        int height = original.height;
+
+        GrayU8 aux = new GrayU8(width, height);
+
+        PriorityQueue<Tuple<Integer,Integer>> queue = new PriorityQueue<Tuple<Integer,Integer>>();
+        PriorityQueue<Tuple<Integer,Integer>> visited = new PriorityQueue<Tuple<Integer,Integer>>();
+
+        Tuple<Integer,Integer> actual = new Tuple<Integer,Integer>(x,y);
+
+        queue.add(actual);
+
+        while (!queue.isEmpty()) {
+            actual = (Tuple<Integer,Integer>) queue.poll();
+
+            if (visited.contains(actual)) { continue; }
+            
+            visited.add(new Tuple<Integer,Integer>(actual.left,actual.right));
+            aux.set(actual.left, actual.right, label);
+
+            for (Tuple<Integer,Integer> point : neighbors_8c_points(original, actual.left, actual.right, 1)) {
+                queue.add(point);
+            }
+        }
+
+        return aux;
+    }
+
+    public static GrayU8 flatzone_4_connectivity(GrayU8 original, int x, int y, int label) {
+        int width = original.width;
+        int height = original.height;
+
+        GrayU8 aux = new GrayU8(width, height);
+
+        PriorityQueue<Tuple<Integer,Integer>> queue = new PriorityQueue<Tuple<Integer,Integer>>();
+        PriorityQueue<Tuple<Integer,Integer>> visited = new PriorityQueue<Tuple<Integer,Integer>>();
+
+        Tuple<Integer,Integer> actual = new Tuple<Integer,Integer>(x,y);
+
+        queue.add(actual);
+
+        while (!queue.isEmpty()) {
+            actual = (Tuple<Integer,Integer>) queue.poll();
+
+            if (visited.contains(actual)) { continue; }
+            
+            visited.add(new Tuple<Integer,Integer>(actual.left,actual.right));
+            aux.set(actual.left, actual.right, label);
+
+            for (Tuple<Integer,Integer> point : neighbors_4c_points(original, actual.left, actual.right, 1)) {
+                queue.add(point);
+            }
+        }
 
         return aux;
     }
