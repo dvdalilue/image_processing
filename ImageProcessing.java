@@ -282,6 +282,44 @@ public class ImageProcessing {
         return aux;
     }
 
+    public static int flatzone_8_number(GrayU8 original) {
+        int width = original.width;
+        int height = original.height;
+
+        int visited[][] = new int[width][height];
+
+        int fz = 0;
+
+        PriorityQueue<Tuple<Integer,Integer>> queue = new PriorityQueue<Tuple<Integer,Integer>>();
+        Tuple<Integer,Integer> actual;
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (visited[x][y] == 1) { continue; }
+
+                fz++;
+
+                actual = new Tuple<Integer,Integer>(x,y);                
+                queue.add(actual);
+
+                while (!queue.isEmpty()) {
+                    actual = (Tuple<Integer,Integer>) queue.poll();
+
+                    if (visited[actual.left][actual.right] == 1)
+                        { continue; }
+                    else
+                        { visited[actual.left][actual.right] = 1; }
+
+                    for (Tuple<Integer,Integer> point : neighbors_8c_points(original, actual.left, actual.right, 1)) {
+                        queue.add(point);
+                    }
+                }
+            }
+        }
+
+        return fz;
+    }
+
     public static GrayU8 flatzone_4_connectivity(GrayU8 original, int x, int y, int label) {
         int width = original.width;
         int height = original.height;
@@ -309,5 +347,43 @@ public class ImageProcessing {
         }
 
         return aux;
+    }
+
+    public static Integer flatzone_4_number(GrayU8 original) {
+        int width = original.width;
+        int height = original.height;
+
+        int visited[][] = new int[width][height];
+
+        int fz = 0;
+
+        PriorityQueue<Tuple<Integer,Integer>> queue = new PriorityQueue<Tuple<Integer,Integer>>();
+        Tuple<Integer,Integer> actual;
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (visited[x][y] == 1) { continue; }
+
+                fz++;
+
+                actual = new Tuple<Integer,Integer>(x,y);                
+                queue.add(actual);
+
+                while (!queue.isEmpty()) {
+                    actual = (Tuple<Integer,Integer>) queue.poll();
+
+                    if (visited[actual.left][actual.right] == 1)
+                        { continue; }
+                    else
+                        { visited[actual.left][actual.right] = 1; }
+
+                    for (Tuple<Integer,Integer> point : neighbors_4c_points(original, actual.left, actual.right, 1)) {
+                        queue.add(point);
+                    }
+                }
+            }
+        }
+
+        return fz;
     }
 }
