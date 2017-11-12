@@ -76,27 +76,23 @@ public class ImageProcessing {
 
         for (int neighbor = 1; neighbor <= size; neighbor++) {
             for (int n = i - neighbor; n <= i + neighbor; n++) {
-                try {
-                    min = Math.min(min,image.get(n,j + neighbor));
-                } catch (ImageAccessException e) { continue; }
+                if (image.isInBounds(n,j + neighbor))
+                    { min = Math.min(min,image.get(n,j + neighbor)); }
             }
 
             for (int n = i - neighbor; n <= i + neighbor; n++) {
-                try {
-                    min = Math.min(min,image.get(n,j - neighbor));
-                } catch (ImageAccessException e) { continue; }
+                if (image.isInBounds(n,j - neighbor))
+                    { min = Math.min(min,image.get(n,j - neighbor)); }
             }
 
             for (int n = j - neighbor + 1; n < j + neighbor; n++) {
-                try {
-                    min = Math.min(min,image.get(i - neighbor,n));
-                } catch (ImageAccessException e) { continue; }
+                if (image.isInBounds(i - neighbor,n))
+                    { min = Math.min(min,image.get(i - neighbor,n)); }
             }
 
             for (int n = j - neighbor + 1; n < j + neighbor; n++) {
-                try {
-                    min = Math.min(min,image.get(i + neighbor,n));
-                } catch (ImageAccessException e) { continue; }
+                if (image.isInBounds(i + neighbor,n))
+                    { min = Math.min(min,image.get(i + neighbor,n)); }
             }
         }
         return min;
@@ -124,27 +120,23 @@ public class ImageProcessing {
 
         for (int neighbor = 1; neighbor <= size; neighbor++) {
             for (int n = i - neighbor; n <= i + neighbor; n++) {
-                try {
-                    max = Math.max(max,image.get(n,j + neighbor));
-                } catch (ImageAccessException e) { continue; }
+                if (image.isInBounds(n,j + neighbor))
+                    { max = Math.max(max,image.get(n,j + neighbor)); }
             }
 
             for (int n = i - neighbor; n <= i + neighbor; n++) {
-                try {
-                    max = Math.max(max,image.get(n,j - neighbor));
-                } catch (ImageAccessException e) { continue; }
+                if (image.isInBounds(n,j - neighbor))
+                    { max = Math.max(max,image.get(n,j - neighbor)); }
             }
 
             for (int n = j - neighbor + 1; n < j + neighbor; n++) {
-                try {
-                    max = Math.max(max,image.get(i - neighbor,n));
-                } catch (ImageAccessException e) { continue; }
+                if (image.isInBounds(i - neighbor,n))
+                    { max = Math.max(max,image.get(i - neighbor,n)); }
             }
 
             for (int n = j - neighbor + 1; n < j + neighbor; n++) {
-                try {
-                    max = Math.max(max,image.get(i + neighbor,n));
-                } catch (ImageAccessException e) { continue; }
+                if (image.isInBounds(i + neighbor,n))
+                    { max = Math.max(max,image.get(i + neighbor,n)); }
             }
         }
         return max;
