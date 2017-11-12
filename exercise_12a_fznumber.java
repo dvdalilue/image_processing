@@ -50,9 +50,9 @@ public class exercise_12a_fznumber {
         int flatzones = 0;
 
         if (conectivity == 8) {
-            flatzones = ImageProcessing.flatzone_8_number(img_gray8_ori);
+            flatzones = ImageProcessing.flatzoneNumber(img_gray8_ori, new EightConnectivity());
         } else if (conectivity == 4) {      
-            flatzones = ImageProcessing.flatzone_4_number(img_gray8_ori);
+            flatzones = ImageProcessing.flatzoneNumber(img_gray8_ori, new FourConnectivity());
         }
 
         String message_output_file = args[2];

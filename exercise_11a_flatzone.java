@@ -43,9 +43,9 @@ public class exercise_11a_flatzone {
         GrayU8 img_gray8_aux = img_gray8_ori.clone();
 
         if (conectivity == 8) {
-            img_gray8_aux = ImageProcessing.flatzone_8_connectivity(img_gray8_ori, x, y, label);
+            img_gray8_aux = ImageProcessing.flatzone(img_gray8_ori, x, y, label, new EightConnectivity());
         } else if (conectivity == 4) {      
-            img_gray8_aux = ImageProcessing.flatzone_4_connectivity(img_gray8_ori, x, y, label);
+            img_gray8_aux = ImageProcessing.flatzone(img_gray8_ori, x, y, label, new FourConnectivity());
         }
 
         UtilImageIO.saveImage(img_gray8_aux, file_output);
