@@ -293,7 +293,10 @@ public class ImageProcessing {
                     for (Tuple<Integer,Integer> point : in_flatzone) {
                         visited[point.left][point.right] = 0;
                     }
-                    // visited[x][y] = 1; // this line give a better output image or correct?
+                    // This line gives a wronge answer 'cause it's making
+                    // an assumption that this point is not on any flatzone.
+                    // Even when can be equal to a neighbor pixel.
+                    // visited[x][y] = 1;
                 }
             }
         }
